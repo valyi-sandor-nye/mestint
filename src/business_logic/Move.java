@@ -2,7 +2,7 @@ package business_logic;
 public class Move {
     private Direction direction;
     private Figure mover; 
-    Move(Figure m, Direction dir) {
+    public Move(Figure m, Direction dir) {
         mover = m;
         direction = dir;
     }

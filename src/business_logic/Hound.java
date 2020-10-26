@@ -7,6 +7,7 @@ public class Hound implements Figure {
     {
         y = yPos;  x = xPos;
     }
+       
     public int getX() {
         return x ;
     }
