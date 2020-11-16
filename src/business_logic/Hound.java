@@ -25,7 +25,7 @@ public class Hound implements Figure {
 
     @Override
     public String toString() {
-        return "Hound{" + "x=" + x + ", y=" + y + '}';
+        return "Hound{" + "y=" + y + ", x=" + x + '}';
     }
     
 }

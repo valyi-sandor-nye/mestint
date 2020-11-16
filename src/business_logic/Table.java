@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Table {
 
-    static int tableSize;
+    int tableSize;
 
     
     Fox fox;
@@ -18,13 +18,23 @@ public class Table {
     List<Move> houndsPossibleMoves = null;
     Boolean isFoxWinning = null;
     
-    public Table() {}
+//    public Table() {
+//        matrix = new Character[tableSize][tableSize];
+//    }
     public void addFox(Fox newFox) {
         fox=newFox;
+        matrix[fox.getY()][fox.getX()] = 'f';
     }
     
     public Fox getFox() {
         return fox;
+    }
+    
+  
+    
+    public List<Hound> getHoundList() {
+        
+        return hounds;
     }
     
     public Hound getHound(int row, int col) {
@@ -40,7 +50,9 @@ public class Table {
     }
     
     public void addHound(Hound newHound) {
-        hounds.add(newHound);}
+        hounds.add(newHound);
+        matrix[newHound.getY()][newHound.getX()] = 'h';
+    }
 
     public List<Move> getFoxPossibleMoves() {
         return foxPossibleMoves;
@@ -58,19 +70,22 @@ public class Table {
         isFoxOnMove = b;
     }
     
-    public static void setTableSize(int x) {
+    public void setTableSize(int x) {
         tableSize = x;
     }
+    
+    public int getTableSize() {return tableSize;}
 
     public static Table getStarterTable(int size) {
-        setTableSize(size);
-        if (size <= 3) {
+
+        if (size <= 3 || size>12 || size%2 !=0 ) {
             return null;
         }
         Table answer = new Table();
-        answer.matrix = new Character[tableSize][tableSize];
-        for (int i = 0; i < tableSize; i++) {
-            for (int j = 0; j < tableSize; j++) {
+        answer.setTableSize(size);
+        answer.matrix = new Character[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 answer.matrix[i][j] = ' ';
             }
         }
@@ -87,14 +102,15 @@ public class Table {
     }
     
 public static Table getEmptyTable(int size) {
-        setTableSize(size);
-        if (size <= 3) {
+
+        if (size <= 3 || size>12 || size%2 !=0 ) {
             return null;
         }
         Table answer = new Table();
-        answer.matrix = new Character[tableSize][tableSize];
-        for (int i = 0; i < tableSize; i++) {
-            for (int j = 0; j < tableSize; j++) {
+        answer.setTableSize(size);
+        answer.matrix = new Character[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 answer.matrix[i][j] = ' ';
             }
         }
@@ -146,7 +162,7 @@ public static Table getEmptyTable(int size) {
         int x = fig.getX(); int y = fig.getY();
         fig.setX(x+move.getDirection().getColStep());
         fig.setY(y+move.getDirection().getRowStep());      
-        isFoxOnMove = !isFoxOnMove;
+        if (isFoxOnMove != null) isFoxOnMove = !isFoxOnMove;
         matrix[y][x] = ' ';
         if (fig instanceof Fox) {
             matrix[fig.getY()][fig.getX()] = 'f'; // thes are the new values
@@ -189,7 +205,7 @@ public static Table getEmptyTable(int size) {
         }
         
     }
-    static private boolean ok(int n) {
+    private boolean ok(int n) {
         return 0 <= n && n < tableSize;
     }
 
