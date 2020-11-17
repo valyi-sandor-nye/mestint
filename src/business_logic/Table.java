@@ -129,6 +129,8 @@ public static Table getEmptyTable(int size) {
                 foxPossibleMoves.add(new Move(fox, dir));
             }
         }
+        System.out.println(foxPossibleMoves.size());
+        foxPossibleMoves.stream().forEach(move->System.out.println(move));
     }
 
     public void determineHoundsPossibleMoves() {
@@ -146,9 +148,9 @@ public static Table getEmptyTable(int size) {
     }
 
     public boolean winHounds() {
-        if (foxPossibleMoves == null) {
+        //if (foxPossibleMoves == null) {
             determineFoxPossibleMoves();
-        }
+        //}
         return foxPossibleMoves.isEmpty();
     }
 
