@@ -8,13 +8,9 @@ package gui;
 import business_logic.Fox;
 import business_logic.Hound;
 import business_logic.Model;
-import business_logic.Table;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
