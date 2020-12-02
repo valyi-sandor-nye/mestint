@@ -1,5 +1,15 @@
 package business_logic;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+/** 
+ * A hound is a figure on the table. 
+ * It has two coordinates, one for row (y) and one for column (x).
+ * It can take only forwards steps.
+ */
+
+@XmlType
 public class Hound implements Figure {
     private int x,
             y;

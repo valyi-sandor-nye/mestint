@@ -6,7 +6,7 @@
 package gui;
 
 /**
- *
+ * This enum separates two kind of table edition.
  * @author valyis
  */
 public enum EditingMethod {

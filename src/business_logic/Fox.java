@@ -1,8 +1,15 @@
 package business_logic;
 
+import javax.xml.bind.annotation.XmlType;
+
+/** 
+ * A fox is a figure on the table. 
+ * It has two coordinates, one for row (y) and one for column (x).
+ */
+
+@XmlType
 public class Fox implements Figure{
 
-    
     private int  y,x;
     public Fox(int yPos, int xPos) {
         x = xPos; y = yPos;

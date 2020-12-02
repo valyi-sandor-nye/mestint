@@ -5,11 +5,12 @@
  */
 package gui;
 
-import business_logic.Model;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-/**
+/** It describes the program and let choose a size for the table. Also a selection 
+ * for the player side is allowed visually but -- in this version -- this selection does not have any effect.
+ * You can play only with the fox.
  *
  * @author valyis
  */

@@ -14,7 +14,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-/**
+/** This window is for editing a table.
+ * 
  * @author valyis
  */
 public class FrameEditing extends javax.swing.JFrame {
@@ -29,7 +30,7 @@ public class FrameEditing extends javax.swing.JFrame {
         initComponents();
         setVisible(true);
         postProcessing(N);
-        JOptionPane.showMessageDialog(this, "még csak az üresből való szerkesztési mód van implementálva. \n Csak a fehér bégyzetekre pakolj!");
+        JOptionPane.showMessageDialog(this, "még csak az üresből való szerkesztési mód van implementálva. \n Csak a fehér négyzetekre pakolj!");
     }
 
     private void ButtonActionPerformed(ActionEvent evt /*, JButton button*/) {
@@ -65,6 +66,8 @@ public class FrameEditing extends javax.swing.JFrame {
         ButtonStartPlaying = new javax.swing.JButton();
         ButtonWithFox = new javax.swing.JRadioButton();
         ButtonWithHounds = new javax.swing.JRadioButton();
+        ButtonSave = new javax.swing.JButton();
+        ButtonOpen = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,6 +90,20 @@ public class FrameEditing extends javax.swing.JFrame {
         buttonGroup1.add(ButtonWithHounds);
         ButtonWithHounds.setText("kutyákkal");
 
+        ButtonSave.setText("Mentés");
+        ButtonSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonSaveActionPerformed(evt);
+            }
+        });
+
+        ButtonOpen.setText("Megnyitás");
+        ButtonOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonOpenActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -94,27 +111,41 @@ public class FrameEditing extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(187, 187, 187)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(70, 70, 70)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ButtonSave)
+                            .addComponent(ButtonOpen)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(104, 104, 104)
-                        .addComponent(ButtonStartPlaying)
-                        .addGap(40, 40, 40)
-                        .addComponent(ButtonWithFox)
-                        .addGap(27, 27, 27)
-                        .addComponent(ButtonWithHounds)))
-                .addContainerGap(114, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(187, 187, 187)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(104, 104, 104)
+                                .addComponent(ButtonStartPlaying)
+                                .addGap(40, 40, 40)
+                                .addComponent(ButtonWithFox)
+                                .addGap(27, 27, 27)
+                                .addComponent(ButtonWithHounds)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(99, 99, 99)
+                        .addComponent(ButtonSave)
+                        .addGap(18, 18, 18)
+                        .addComponent(ButtonOpen)))
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonStartPlaying)
@@ -183,6 +214,23 @@ public class FrameEditing extends javax.swing.JFrame {
 
     }//GEN-LAST:event_ButtonStartPlayingActionPerformed
 
+    private void ButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonSaveActionPerformed
+        readModelFromGUI();
+        FrameSave frameSave = new FrameSave(this,model);
+        frameSave.setEnabled(true);
+        frameSave.setVisible(true);
+        
+    }//GEN-LAST:event_ButtonSaveActionPerformed
+
+    private void ButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonOpenActionPerformed
+        FrameOpen frameOpen = new FrameOpen(this, model);
+        frameOpen.setEnabled(true);
+        frameOpen.setVisible(true);
+        
+        
+        
+    }//GEN-LAST:event_ButtonOpenActionPerformed
+
     private void readModelFromGUI() {
         int N = model.getTable().getTableSize();
         
@@ -204,7 +252,25 @@ public class FrameEditing extends javax.swing.JFrame {
             }
         }
     }
-   
+
+public void refreshGUIFromModel(){
+        int N = model.getTable().getTableSize();      
+        for (int row = 0; row < N; row++) {
+            for (int col = 0; col < N; col++) {
+                    buttons[row][col].setText(" ");
+                }
+
+            }
+        if (model.getTable().getFox() != null)
+        buttons[model.getTable().getFox().getY()][model.getTable().getFox().getX()].setText("f");
+       model.getTable().getHoundList().forEach(hound
+            -> {
+        buttons[hound.getY()][hound.getX()].setText("h");
+    }
+    );
+}
+    
+    
  private void postProcessing(int N) {
          model = new Model(N);
         jPanel1.setLayout(new GridLayout(N, N));
@@ -230,6 +296,8 @@ public class FrameEditing extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonOpen;
+    private javax.swing.JButton ButtonSave;
     private javax.swing.JButton ButtonStartPlaying;
     private javax.swing.JRadioButton ButtonWithFox;
     private javax.swing.JRadioButton ButtonWithHounds;

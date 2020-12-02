@@ -1,4 +1,9 @@
 package business_logic;
+
+/** A Move is an operator. It is determined by a figure and a direction.
+ * 
+ * @author valyis
+ */
 public class Move {
     private Direction direction;
     private Figure mover;

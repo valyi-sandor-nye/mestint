@@ -3,10 +3,13 @@ package gui;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
-/**
+/** This class describes a button that 'knows' two coordinates. It exists 
+ * for the sake of uniform handling of events occuring buttons on the table.
  *
  * @author valyis
  */
+
+
 public class JButtonWithPosition extends JButton{
     int row; int col;
 
