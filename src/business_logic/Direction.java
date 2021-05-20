@@ -11,6 +11,6 @@ public enum Direction {
     final private int rowStep; final private int colStep;
     public int getRowStep() {return rowStep;}
     public int getColStep() {return colStep;}
-    private Direction(int a1, int a2) {rowStep=a1; colStep=a2;}
+    private Direction(int p1, int p2) {rowStep=p1; colStep=p2;}
    
 }

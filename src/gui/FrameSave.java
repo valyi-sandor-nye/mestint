@@ -128,7 +128,8 @@ public class FrameSave extends javax.swing.JFrame
         }
         if (newName == null || newName.length() == 0) {JOptionPane.showMessageDialog(this,"Nulla név");} else
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mestint", "mestint", "tV3pCERG4X1QzI7t");
+                                                                            
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mibead2021", "root", "");
             PreparedStatement st = con.prepareStatement("SELECT name FROM FoxAndHounds WHERE name=?");
             st.setString(1,newName);
             st.execute();

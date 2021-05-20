@@ -163,13 +163,13 @@ public class guiSplashScreen extends javax.swing.JFrame {
 
     private void ButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonStartActionPerformed
         int N = 0;
-        while (N <= 3 || N>12 || N%2 !=0) {
+        while (N <= 3 || N>10 || N%2 !=0) {
             String s = TextFieldTableSize.getText().trim();
             try {
                 N = Integer.parseInt(s);
-            } catch (NumberFormatException nfe) {logger.warning("Nem jó az input méret, mint szám");}
+            } catch (NumberFormatException nfe) {logger.warning("Nem szám az input méret");}
             if (N <= 3 || N>12 || N%2 !=0) {
-                s = JOptionPane.showInputDialog(this, "Nem jó az input méret, mint szám");
+                s = JOptionPane.showInputDialog(this, "Nem jó az input méret, mint szám. Legyen 4 és 10 közötti páros egész!");
                 try { 
                     N = Integer.parseInt(s);
                 }

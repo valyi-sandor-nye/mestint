@@ -10,29 +10,29 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType
 public class Fox implements Figure{
 
-    private int  y,x;
-    public Fox(int yPos, int xPos) {
-        x = xPos; y = yPos;
+    private int  row,col;
+    public Fox(int p_row, int p_col) {
+       row = p_row;  col = p_col; 
     }
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int xPosition) {
-        this.x = xPosition;
+    public int getCol() {
+        return col;
     }
 
-    public int getY() {
-        return y;
+    public void setCol(int p) {
+        this.col = p;
     }
 
-    public void setY(int yPosition) {
-        this.y = yPosition;
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int p) {
+        this.row = p;
     }
 
     @Override
     public String toString() {
-        return "Fox{" + "y=" + y + ", x=" + x + '}';
+        return "Fox{" + "row=" + row + ", col=" + col + '}';
     }
     
 } // end class Fox

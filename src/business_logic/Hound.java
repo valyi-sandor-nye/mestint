@@ -11,31 +11,31 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlType
 public class Hound implements Figure {
-    private int x,
-            y;
-    public Hound(int yPos, int xPos) 
+    private int row,
+            col;
+    public Hound(int r, int c) 
     {
-        y = yPos;  x = xPos;
+        col = c;  row = r;
     }
        
-    public int getX() {
-        return x ;
+    public int getCol() {
+        return col ;
     }
 
-    public void setX(int a) {
-        this.x = a;
+    public void setCol(int p) {
+        this.col = p;
     }
-    public int getY() {
-        return y;
+    public int getRow() {
+        return row;
     }
 
-    public void setY(int a) {
-        this.y = a;
+    public void setRow(int p) {
+        this.row = p;
     }
 
     @Override
     public String toString() {
-        return "Hound{" + "y=" + y + ", x=" + x + '}';
+        return "Hound{" + "row=" + row + ", col=" + col + '}';
     }
     
 }

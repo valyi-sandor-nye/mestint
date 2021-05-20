@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
  * @author valyis
  */
 public class FramePlaying extends javax.swing.JFrame {
+        static int STARTINGDEPTH = 0;
         JButtonWithPosition[][] buttons;
         Model model;
         int N; 
@@ -31,7 +32,7 @@ public class FramePlaying extends javax.swing.JFrame {
         humanWithFox = inputHumanWithFox;
         N = model.getTable().getTableSize();
         initComponents();
-        postprocessing();
+        putUpTheButtonMatrix();
     }
 
     private void ButtonActionPerformed(ActionEvent evt) {
@@ -40,21 +41,25 @@ public class FramePlaying extends javax.swing.JFrame {
         int col = button.getCol();
          if (move == null && humanWithFox) {
             if (button.getText().equals(" ")) {
-                int foxX = model.getTable().getFox().getX();
-                int foxY = model.getTable().getFox().getY();
+                int foxRow = model.getTable().getFox().getRow();
+                int foxCol = model.getTable().getFox().getCol();
                 for (Direction dir : Direction.values()) {
-                    if (dir.getRowStep() == (row - foxY) && dir.getColStep() == (col - foxX)) {
+                    if (dir.getRowStep() == (row - foxRow) && dir.getColStep() == (col - foxCol)) {
                         move = new Move(model.getTable().getFox(), dir);
                         model.getTable().doMove(move);
+                        if (model.getTable().winFox()) {
+                            JOptionPane.showMessageDialog(this,"Győzott a róka!");
+                            return;
+                        }
                         loadButtonTextsFromModel();
                         setVisible(true);
                         move = null;
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(300);
                         } catch (InterruptedException ex) {
                             Logger.getLogger("FoxAndHounds").log(Level.SEVERE, "Megszakított izé", ex);
                         }
-                        model.getTable().doARandomHoundMove();
+                        model.getTable().doAIMove(STARTINGDEPTH);
                         loadButtonTextsFromModel();
                         setVisible(true);
                     }
@@ -64,9 +69,6 @@ public class FramePlaying extends javax.swing.JFrame {
         if (model.getTable().winHounds()) {
             JOptionPane.showMessageDialog(this,"Győzott a kutyacsapat!");
         }
-        if (model.getTable().winFox()) {
-            JOptionPane.showMessageDialog(this,"Győzott a róka!");
-        }
 
         
     }
@@ -75,16 +77,16 @@ public class FramePlaying extends javax.swing.JFrame {
         for (int row=0;row<N;row++) for (int col=0;col<N;col++) {
             buttons[row][col].setText(" ");
         }
-        int foxX = model.getTable().getFox().getX();
-        int foxY = model.getTable().getFox().getY();
+        int foxX = model.getTable().getFox().getCol();
+        int foxY = model.getTable().getFox().getRow();
         buttons[foxY][foxX].setText("f");
         for (Hound h: model.getTable().getHoundList()) {
-            buttons[h.getY()][h.getX()].setText("h");
+            buttons[h.getRow()][h.getCol()].setText("h");
         }
         
     }
 
-    private void postprocessing() {
+    private void putUpTheButtonMatrix() {
         jPanel1.setLayout(new GridLayout(N, N));
         buttons = new JButtonWithPosition[N][N];
         

@@ -29,7 +29,7 @@ public class FrameEditing extends javax.swing.JFrame {
     public FrameEditing(EditingMethod editingMethod, int N) {
         initComponents();
         setVisible(true);
-        postProcessing(N);
+        addingButtonMatrix(N);
         JOptionPane.showMessageDialog(this, "még csak az üresből való szerkesztési mód van implementálva. \n Csak a fehér négyzetekre pakolj!");
     }
 
@@ -39,7 +39,6 @@ public class FrameEditing extends javax.swing.JFrame {
             case " ":
                 button.setText("f");
                 break;
-            //  JOptionPane.showMessageDialog(null, sor+" "+oszlop);
             case "f":
                 button.setText("h");
                 break;
@@ -191,14 +190,14 @@ public class FrameEditing extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Csak 1 f lehetséges, az a róka");
             ok = false;
         } else if (numberOfFs < 1) {
-            JOptionPane.showMessageDialog(this, "Legyen egy  f, az a róka");
+            JOptionPane.showMessageDialog(this, "Legyen pontosan  f, az a róka");
             ok = false;
         }
         if (numberOfHs > N/2) {
-            JOptionPane.showMessageDialog(this, "Csak "+N/2+" h lehetséges, azok a kutyák");
+            JOptionPane.showMessageDialog(this, "Több, mint "+N/2+" h van fönn, annyi kell");
             ok = false;
         } else if (numberOfHs < N/2) {
-            JOptionPane.showMessageDialog(this, "Legyen "+N/2+"  h, azok a kutyák");
+            JOptionPane.showMessageDialog(this, "Kevesebb, mint "+N/2+"  h van fönn, annyi kell");
             ok = false;
         }
         if (ok) {
@@ -233,7 +232,7 @@ public class FrameEditing extends javax.swing.JFrame {
 
     private void readModelFromGUI() {
         int N = model.getTable().getTableSize();
-        
+        model.getTable().clear();
         for (int row = 0; row < N; row++) {
             for (int col = 0; col < N; col++) {
                 switch (buttons[row][col].getText()) {
@@ -262,16 +261,16 @@ public void refreshGUIFromModel(){
 
             }
         if (model.getTable().getFox() != null)
-        buttons[model.getTable().getFox().getY()][model.getTable().getFox().getX()].setText("f");
+        buttons[model.getTable().getFox().getRow()][model.getTable().getFox().getCol()].setText("f");
        model.getTable().getHoundList().forEach(hound
             -> {
-        buttons[hound.getY()][hound.getX()].setText("h");
+        buttons[hound.getRow()][hound.getCol()].setText("h");
     }
     );
 }
     
     
- private void postProcessing(int N) {
+ private void addingButtonMatrix(int N) {
          model = new Model(N);
         jPanel1.setLayout(new GridLayout(N, N));
         buttons = new JButtonWithPosition[N][N];

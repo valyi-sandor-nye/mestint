@@ -1,11 +1,16 @@
 package business_logic;
 
+import game.FoxAndHoundsPosition;
+import static game.GameSearch.HUMAN;
+import static game.GameSearch.PROGRAM;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import game.FoxAndHoundsGame;
 
 /**
  * A table represents the actual state of the fox-and-houds game. Its
@@ -63,7 +68,7 @@ public class Table {
 //    }
     public void addFox(Fox newFox) {
         fox = newFox;
-        matrix[fox.getY()][fox.getX()] = 'f';
+        matrix[fox.getRow()][fox.getCol()] = 'f';
     }
 
     public Fox getFox() {
@@ -81,7 +86,7 @@ public class Table {
         } else {
             Hound answer = null;
             for (Hound h : hounds) {
-                if (h.getY() == row && h.getX() == col) {
+                if (h.getRow() == row && h.getCol() == col) {
                     answer = h;
                 }
             }
@@ -91,7 +96,7 @@ public class Table {
 
     public void addHound(Hound newHound) {
         hounds.add(newHound);
-        matrix[newHound.getY()][newHound.getX()] = 'h';
+        matrix[newHound.getRow()][newHound.getCol()] = 'h';
     }
 
     public List<Move> getFoxPossibleMoves() {
@@ -185,10 +190,10 @@ public class Table {
     public void determineFoxPossibleMoves() {
         foxPossibleMoves = new ArrayList<>();
         for (Direction dir : Direction.values()) {
-            int y = fox.getY() + dir.getRowStep();
-            int x = fox.getX() + dir.getColStep();
-            if (fits(y) && fits(x)
-                    && matrix[y][x].equals(' ')) {
+            int row = fox.getRow() + dir.getRowStep();
+            int col = fox.getCol() + dir.getColStep();
+            if (fits(row) && fits(col)
+                    && matrix[row][col].equals(' ')) {
                 foxPossibleMoves.add(new Move(fox, dir));
             }
         }
@@ -206,9 +211,9 @@ public class Table {
 
         for (Hound hound : hounds) {
             for (Direction dir : Arrays.asList(Direction.SOUTHEAST, Direction.SOUTHWEST)) {
-                if (fits(hound.getY() + dir.getRowStep())
-                        && fits(hound.getX() + dir.getColStep())
-                        && matrix[hound.getY() + dir.getRowStep()][hound.getX() + dir.getColStep()].equals(' ')) {
+                if (fits(hound.getRow() + dir.getRowStep())
+                        && fits(hound.getCol() + dir.getColStep())
+                        && matrix[hound.getRow() + dir.getRowStep()][hound.getCol() + dir.getColStep()].equals(' ')) {
                     houndsPossibleMoves.add(new Move(hound, dir));
                 }
             }
@@ -222,7 +227,7 @@ public class Table {
         //if (foxPossibleMoves == null) {
         determineFoxPossibleMoves();
         //}
-        return foxPossibleMoves.isEmpty();
+        return !(getFox().getRow()<=0) && foxPossibleMoves.isEmpty();
     }
 
     /** This method is to determine if the fox party is actually winning or not.
@@ -230,25 +235,26 @@ public class Table {
      * @return the truth value
     */
     public boolean winFox() {
-        isFoxWinning = (getFox().getY() <= 0);
+        isFoxWinning = (getFox().getRow() <= 0);
         return isFoxWinning;
     }
     /** This method executes a move on this table. The possibility of the move is not checked.*/
     public void doMove(Move move) {
         Figure fig = move.getMover();
-        int x = fig.getX();
-        int y = fig.getY();
-        fig.setX(x + move.getDirection().getColStep());
-        fig.setY(y + move.getDirection().getRowStep());
+        int row = fig.getRow();
+        int col = fig.getCol();
+        fig.setRow(row + move.getDirection().getRowStep());
+        fig.setCol(col + move.getDirection().getColStep());
         if (isFoxOnMove != null) {
             isFoxOnMove = !isFoxOnMove;
         }
-        matrix[y][x] = ' ';
+        matrix[row][col] = ' ';
         if (fig instanceof Fox) {
-            matrix[fig.getY()][fig.getX()] = 'f'; // these are the new values
+            matrix[fig.getRow()][fig.getCol()] = 'f'; // these are the new values
         } else { // The mover is a hound
-            matrix[fig.getY()][fig.getX()] = 'h'; // these are the new values
+            matrix[fig.getRow()][fig.getCol()] = 'h'; // these are the new values
         }
+        isFoxOnMove = !isFoxOnMove;
     }
 
     @Override
@@ -260,9 +266,9 @@ public class Table {
                 tableAsCharArray[row][col] = '0';
             }
         }
-        tableAsCharArray[fox.getY()][fox.getX()] = 'f';
+        tableAsCharArray[fox.getRow()][fox.getCol()] = 'f';
         for (Hound h : hounds) {
-            tableAsCharArray[h.getY()][h.getX()] = 'h';
+            tableAsCharArray[h.getRow()][h.getCol()] = 'h';
         }
         StringBuilder sb = new StringBuilder("[\n");
         for (int row = 0; row < size; row++) {
@@ -288,7 +294,26 @@ public class Table {
         }
 
     }
-    /**This method decides for an integer that it fits into the table indices, 
+    /** In this method the AI (namely, FoxAndHoundsGame) are called to determine the best move and then this method executes it. 
+     * If there is no possible hound move then
+     * does nothing.
+     */
+        public void doAIMove(int depth) {
+            FoxAndHoundsPosition aPosition = new FoxAndHoundsPosition();
+            aPosition.setN(tableSize);
+            aPosition.setMatrix(matrix);
+            FoxAndHoundsGame fahg = new FoxAndHoundsGame();
+            Vector v;
+            if (isFoxOnMove == false) {v = fahg.alphaBeta(depth, aPosition, PROGRAM);}
+            else {v = fahg.alphaBeta(depth, aPosition, HUMAN);}
+            if (v == null || !(v.size()>=2)) return; //XXX //TODO ide nem kellene vmi excepiion???
+            aPosition = (FoxAndHoundsPosition)v.elementAt(1); 
+            Move actualMove = whatMoveWasDone(aPosition);
+            doMove(actualMove);
+    }
+
+        
+        /**This method decides for an integer that it fits into the table indices, 
      * that is non-negative and less than the table size.
      * @param n an index
      * @return the condition if n it fits into the table indices
@@ -310,5 +335,49 @@ public class Table {
         }
 
     }
+
+    /** This method determines what move was found as best by AI that resulted the given new Position. */
+    private Move whatMoveWasDone(FoxAndHoundsPosition newPosition) {
+        Character[][] newMatrix = new Character[tableSize][tableSize];
+        for (int row = 0; row < tableSize; row++)  for (int col = 0; col < tableSize; col++)  
+                                {newMatrix[row][col] = newPosition.matrix[row][col];}
+        if (!isFoxOnMove) {
+            for (Hound hound : hounds) {
+                for (Direction dir : Arrays.asList(Direction.SOUTHEAST, Direction.SOUTHWEST)) {
+                    int row = hound.getRow(), col = hound.getCol();
+                    if (newMatrix[row][col] == ' '
+                            && fits(row + dir.getRowStep())
+                            && fits(col + dir.getColStep())
+                            && newMatrix[row + dir.getRowStep()][col + dir.getColStep()].equals('h')
+                            && matrix[row + dir.getRowStep()][col + dir.getColStep()].equals(' ')) {
+                        return (new Move(hound, dir));
+                    }
+                }
+            }
+        } else {
+                for (Direction dir : Arrays.asList(Direction.values())) {
+                    int row = fox.getRow(), col = fox.getCol();
+                    if (newMatrix[row][col] == ' '
+                            && fits(row + dir.getRowStep())
+                            && fits(col + dir.getColStep())
+                            && newMatrix[row + dir.getRowStep()][col + dir.getColStep()].equals('f')
+                            && matrix[row + dir.getRowStep()][col + dir.getColStep()].equals(' ')) {
+                        return (new Move(fox, dir));
+                    }
+                }
+        }
+        return null; // XXX this row cannot be reached while execution
+    }
+
+    public void clear() {
+        fox = null;
+        hounds = new ArrayList<>();
+        matrix = new Character[tableSize][tableSize];
+        for (int i = 0; i < tableSize; i++) {
+            for (int j = 0; j < tableSize; j++) {
+                matrix[i][j] = ' ';
+            }
+        }
+        }
 
 }

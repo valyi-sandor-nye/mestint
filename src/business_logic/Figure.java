@@ -6,9 +6,9 @@ package business_logic;
  * @author valyis
  */
 public interface Figure {
-    int getX();
-    int getY();
-    void setX(int x);
-    void setY(int a);
+    int getCol();
+    int getRow();
+    void setCol(int x);
+    void setRow(int a);
     
 }

@@ -39,7 +39,7 @@ public class FrameOpen extends javax.swing.JFrame {
         }
 
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mestint", "mestint", "tV3pCERG4X1QzI7t");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mibead2021", "root", "");
             st = con.createStatement();
             rs = st.executeQuery("SELECT * FROM FoxAndHounds WHERE 1");
             DefaultTableModel tmodel = (DefaultTableModel) TablePane.getModel();
