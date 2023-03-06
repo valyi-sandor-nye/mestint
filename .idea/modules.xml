@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/LugerVS/LugerVS.iml" filepath="$PROJECT_DIR$/LugerVS/LugerVS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/mestint.iml" filepath="$PROJECT_DIR$/.idea/mestint.iml" />
+    </modules>
+  </component>
+</project>
