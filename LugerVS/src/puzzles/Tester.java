@@ -40,6 +40,6 @@ public class Tester {
 //		System.out.println("---------------------------------------------------------------");
 		trySolvers(new QueenN());
 		System.out.println("---------------------------------------------------------------");
-
+		// trySolvers(new Kirako());
 	}
 }
